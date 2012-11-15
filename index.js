@@ -63,11 +63,17 @@ exports.attach = function (options) {
   amino.publish = function () {
     var args = Array.prototype.slice.call(arguments)
       , ev = args.shift()
+      , cb = args.pop();
+
+    if(typeof cb != 'function') {
+      if(cb!==undefined) args.push(cb); // don't push empty values
+      cb = function(){};
+    }
 
     try {
       args = {args: args}; // (dehydration only works on objects)
       args = hydration.dehydrate(args);
-      client.publish(ev, JSON.stringify(args));
+      client.publish(ev, JSON.stringify(args), cb);
     }
     catch (e) {
       amino.emit('error', e);
