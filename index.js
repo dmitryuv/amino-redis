@@ -66,7 +66,8 @@ exports.attach = function (options) {
       , cb = args.pop();
 
     if(typeof cb != 'function') {
-      if(cb!==undefined) args.push(cb); // don't push empty values
+      if(typeof cb!=='undefined')
+        args.push(cb); // don't push empty values
       cb = function(){};
     }
 
